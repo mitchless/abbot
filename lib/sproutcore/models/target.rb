@@ -536,7 +536,7 @@ module SC
         build_number = Digest::SHA1.hexdigest(digests.join)
       end
 
-      return build_number.to_s
+      return build_number.to_s[0..10]
     end
 
     ######################################################
