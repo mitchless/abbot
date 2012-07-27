@@ -19,6 +19,7 @@ module SC
                     :jstdhost   => :string,
                     :jstdconfpath => :string,
                     :jstdproxy  => :string,
+                    :jstdcoverage => false,
                     :projroot	  => :string,
                     :jasminejs 	=> :string,
                     :jasmineadapter => :string,
@@ -27,6 +28,11 @@ module SC
                     :confhost	  => :string,
                     :irb        => false,
                     :filesystem => true
+
+    method_option :allow_from_ips,
+      :default => "127.0.0.1",
+      :desc => "One or more (comma-separated) masks to accept requests from. " +
+        "For example: 10.*.*.*,127.0.0.1"
 
     def jstd(*targets)
       require 'nokogiri'
@@ -37,6 +43,7 @@ module SC
       jstdhost = options[:jstdhost] || "http://localhost"
       jstdconfpath = options[:jstdconfpath] || "jsTestDriver.conf"
       jstdproxy = options[:jstdproxy] || '{matcher: "/static/*", server: "http://localhost:4225/"}'
+      jstdcoverage = options[:jstdcoverage]
       projroot = options[:projroot] || ""
       jasminejs = options[:jasminejs]
       jasmineadapter = options[:jasmineadapter]
@@ -91,12 +98,19 @@ module SC
         project.nomonitor_pattern = Regexp.new(Regexp.escape(jstdconfpath))
         
         # write out to yaml conf
-        conf = {"server"=>"#{jstdhost}:#{jstdport}", "load"=>loadPaths} 
+        jstdproxy = YAML::load(jstdproxy)
+        conf = {"server" => "#{jstdhost}:#{jstdport}",
+                "load" => loadPaths,
+                "proxy" => [jstdproxy]}
+        if jstdcoverage
+          conf["plugin"] = [{"name" => "coverage",
+                             "jar" => "plugins/coverage.jar",
+                             "module" => "com.google.jstestdriver.coverage.CoverageModule"}]
+        end
         File.open(jstdconfpath, "w") do |f|
           f.write(YAML::dump(conf))
         end
-        File.open(jstdconfpath, "a") {|f| f.write("proxy: \n- #{jstdproxy}") }
-        
+
         SC.logger.info "Wrote to #{jstdconfpath}" 
       end
       
