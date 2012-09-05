@@ -476,7 +476,10 @@ namespace :manifest do
           # a unique identifier for the instance. we can share across localizations; this is
           # merely used to prevent conflicts within the SAME CSS file: Chance makes sure
           # all rules for generated images include this key. We'll use the target name.
-          :instance_id => target[:target_name]
+          :instance_id => target[:target_name],
+
+          # Sass load paths. This comes from the buildfile.
+          :sass_load_paths => target.target_type == :module ? target.parent_target.config[:sass_load_paths] : target.config[:sass_load_paths]
         }
         chance_key = manifest[:staging_root] + "/" + resource_name
         

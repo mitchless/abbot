@@ -259,11 +259,14 @@ module Chance
         css = "@import \"#{image_css_path}\";\n" + import_css
 
         # Step 3: Apply Sass Engine
+        load_paths = @options[:sass_load_paths] || []
+        load_paths += Compass.sass_engine_options[:load_paths] || []
         engine = Sass::Engine.new(css, Compass.sass_engine_options.merge({
           :syntax => :scss,
           :filename => "chance_main.css",
           :cache_location => "./tmp/sass-cache",
-          :style => @options[:minify] ? :compressed : :expanded
+          :style => @options[:minify] ? :compressed : :expanded,
+          :load_paths => load_paths
         }))
         css = engine.render
 
