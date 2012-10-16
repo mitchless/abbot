@@ -1,3 +1,14 @@
+*Seapine SproutCore 1.9.0.1 (October 16, 2012)*
+
+* Cherry-picked from 'patch/mitchless/sccompile-src'. Rebuild of SCCompiler.jar with Java 1.5 (c548475147).
+* Cherry-picked. Reduced the size of the SHA1 hash from 40 chars down to 10 chars (27564b1e68).
+* Cherry-picked. js-test-driver support (26eae0f950).
+* Cherry-picked. Add support for --allow-from-ips and the js-test-driver coverage plugin (043fd3bac9).
+* Cherry-picked. Update Sass dependency to 3.2 (57278017d4).
+* Cherry-picked. Add sass_load_paths option to buildfile (6fed75f32d).
+
+*****
+
 *SproutCore 1.8.0 (March 06, 2012)*
 
 * Bumped the gem version to 1.8.0
