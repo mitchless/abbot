@@ -29,6 +29,7 @@ module SC::Helpers
     # MINIFICATION MANAGER
     def initialize
       @queue = []
+      @done_queue = []
       @working_minifiers = []
       @max_minifiers = 4
 
@@ -41,7 +42,9 @@ module SC::Helpers
 
 
     def <<(item)
-      @queue << item
+      @safety.synchronize {
+        @queue << item
+      }
 
       _process_queue
     end
@@ -61,8 +64,11 @@ module SC::Helpers
 
         while @queue.length > 0
           queue = @safety.synchronize {
-            queue = @queue.clone
+            queue = @queue.reject { |p|
+              @done_queue.include? p
+            }
             @queue.clear
+            @done_queue.concat queue
 
             queue
           }
