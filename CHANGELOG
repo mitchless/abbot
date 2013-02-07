@@ -1,4 +1,4 @@
-*Seapine SproutCore 1.9.0.8 (January 21, 2013)*
+*Seapine SproutCore 1.9.0.9 (February 7, 2013)*
 
 * Cherry-picked from 'patch/mitchless/sccompile-src'. Rebuild of SCCompiler.jar with Java 1.5 (c548475147).
 * Cherry-picked. Reduced the size of the SHA1 hash from 40 chars down to 10 chars (27564b1e68).
